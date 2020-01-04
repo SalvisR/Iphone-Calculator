@@ -88,13 +88,23 @@ numbers.forEach(number => {
 
 mathBtns.forEach(btn => {
   btn.addEventListener('click', () => {
-    screenNumber = '';
-    if (toNumber(result) !== 0) {
-      screen.textContent = result;
+
+    if (btn.dataset.math === '%') {
+      screenNumber = toNumber(screenNumber) / 100;
+      screen.textContent = screenNumber;
+
+    } else if (btn.dataset.math === '+/-') {
+      screenNumber = -1 * toNumber(screenNumber);
+      screen.textContent = screenNumber;
+
+    } else {
+      screenNumber = '';
+      if (toNumber(result) !== 0) {
+        screen.textContent = result;
+      }
+      action = btn.dataset.math;
+      result = toNumber(screen.textContent);
+      fn = math[action](result);
     }
-    action = btn.dataset.math;
-    console.log(action);
-    result = toNumber(screen.textContent);
-    fn = math[action](result);
   })
 });
