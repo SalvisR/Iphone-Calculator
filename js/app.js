@@ -6,6 +6,7 @@ const mathBtns = document.querySelectorAll('.btn');
 
 let result = 0;
 let action = '';
+let secondAction = '';
 let fn = null;
 let screenNumber = '';
 
@@ -44,13 +45,20 @@ ac.addEventListener('click', () => {
   result = 0;
   action = '';
   fn = null;
+  secondAction = '';
 });
 
 // Get result
 sumBtn.addEventListener('click', () => {
-  action = '';
-  fn = null;
-  screen.textContent = result;
+  if (action !== '' && screenNumber !== '') {
+    secondAction = action;
+    action = '';
+    screen.textContent = result;
+  } else if (action === '' && fn !== null) {
+    fn = math[secondAction](toNumber(result));
+    result = fn(toNumber(screenNumber));
+    screen.textContent = result;
+  }
   setFontSize();
 });
 
@@ -78,6 +86,15 @@ numbers.forEach(number => {
         screenNumber += e.target.textContent;
         screen.textContent = screenNumber;
         result = fn(toNumber(screenNumber));
+      } else if (action === '' && secondAction !== '') {
+        if (screenNumber.length > 8) {
+          return;
+        }
+        ac.click();
+
+        screenNumber = e.target.textContent;
+        screen.textContent = screenNumber;
+        secondAction = '';
       } else {
         if (screenNumber.length > 8) {
           return;
